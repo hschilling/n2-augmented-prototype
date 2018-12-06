@@ -107,13 +107,19 @@ function SetupLegend(d3, d3ContentDiv) {
     // SOLVER
     //SOLVER COLORS
     {
-        var text = ["None", "Scipy"];
-        var colors = [NO_SOLVER_COLOR, SCIPY_SOLVER_COLOR];
-        var shapeFunctions = [DrawScalar, DrawVector, DrawGroup];
-        for (var i = 0; i < text.length; ++i) {
+        // var text = ["None", "Scipy"];
+        // var colors = [NO_SOLVER_COLOR, SCIPY_SOLVER_COLOR];
+        // var shapeFunctions = [DrawScalar, DrawVector, DrawGroup];
+        // for (var i = 0; i < text.length; ++i) {
+        //     var el = svg_legend.append("g").attr("transform", "translate(" + (columnWidth * 2 + xOffset + u) + "," + (80 + 40 * i + v) + ")");
+        //     DrawLegendColor(el, u, v, colors[i], false);
+        //     CreateText(el, text[i]);
+        // }
+        for (var i = 0; i < solverNames.length; ++i) {
             var el = svg_legend.append("g").attr("transform", "translate(" + (columnWidth * 2 + xOffset + u) + "," + (80 + 40 * i + v) + ")");
-            DrawLegendColor(el, u, v, colors[i], false);
-            CreateText(el, text[i]);
+            var name = solverNames[i];
+            DrawLegendColor(el, u, v, solverColors[name], false);
+            CreateText(el, name);
         }
     }
     // SOLVER END

@@ -101,16 +101,16 @@ function UpdateSvgCss(svgStyleElement, FONT_SIZE_PX){
         "    font-family: helvetica, sans-serif; " +
         "    font-size: " + FONT_SIZE_PX +"px; " +
         "} " +
-        "g.scipy_solver > rect { " +
-        "    cursor: pointer; " +
-        "    fill-opacity: .8; " +
-        "    fill: " + SCIPY_SOLVER_COLOR + "; " +
-        "} " +
-        "g.no_solver > rect { " +
-        "    cursor: pointer; " +
-        "    fill-opacity: .8; " +
-        "    fill: " + NO_SOLVER_COLOR + "; " +
-        "} " +
+        // "g.scipy_solver > rect { " +
+        // "    cursor: pointer; " +
+        // "    fill-opacity: .8; " +
+        // "    fill: " + SCIPY_SOLVER_COLOR + "; " +
+        // "} " +
+        // "g.no_solver > rect { " +
+        // "    cursor: pointer; " +
+        // "    fill-opacity: .8; " +
+        // "    fill: " + NO_SOLVER_COLOR + "; " +
+        // "} " +
         // SOLVER END
         "/* n2 diagram*/  " +
         "g.component_box > rect { " +
@@ -132,6 +132,18 @@ function UpdateSvgCss(svgStyleElement, FONT_SIZE_PX){
         ".horiz_line, .vert_line { /*n2 gridlines*/ " +
         "    stroke: " + N2_GRIDLINE_COLOR + "; " +
         "}";
+
+        // SOLVER 
+        for (var i = 0; i < solverNames.length; ++i) {
+            var name = solverNames[i];
+            myCssText +=  "g." + solverClasses[name] + " > rect { " +
+            "    cursor: pointer; " +
+            "    fill-opacity: .8; " +
+            "    fill: " + solverColors[name] + "; " +
+            "} " ;
+        }
+        // SOLVER END
+
 
         svgStyleElement.innerHTML = myCssText;
     }

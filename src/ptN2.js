@@ -347,9 +347,9 @@ function PtN2Diagram(parentDiv, modelData) {
         //     .attr("height", HEIGHT_PX + 2 * SVG_MARGIN);
 
         // SOLVER
-        svgDiv.transition(sharedTransition).style("width", (widthPTreePx + PTREE_N2_GAP_PX + WIDTH_N2_PX + widthPTreePx + 2 * SVG_MARGIN + PTREE_N2_GAP_PX) + "px")
+        svgDiv.transition(sharedTransition).style("width", (widthPTreePx + PTREE_N2_GAP_PX + WIDTH_N2_PX + widthPSolverTreePx + 2 * SVG_MARGIN + PTREE_N2_GAP_PX) + "px")
             .style("height", (HEIGHT_PX + 2 * SVG_MARGIN) + "px");
-        svg.transition(sharedTransition).attr("width", widthPTreePx + PTREE_N2_GAP_PX + WIDTH_N2_PX + widthPTreePx + 2 * SVG_MARGIN + PTREE_N2_GAP_PX)
+        svg.transition(sharedTransition).attr("width", widthPTreePx + PTREE_N2_GAP_PX + WIDTH_N2_PX + widthPSolverTreePx + 2 * SVG_MARGIN + PTREE_N2_GAP_PX)
             .attr("height", HEIGHT_PX + 2 * SVG_MARGIN);
         // SOLVER END
 
@@ -483,11 +483,12 @@ function PtN2Diagram(parentDiv, modelData) {
             .attr("class", function (d) {
                 // SOLVER
                 // return "solver_group " + GetClass(d);
-                if (d.solver === "LN: SCIPY"){
-                    solver_class = "scipy_solver"
-                } else {
-                    solver_class = "no_solver"                    
-                }
+                // if (d.solver === "LN: SCIPY"){
+                //     solver_class = "scipy_solver"
+                // } else {
+                //     solver_class = "no_solver"                    
+                // }
+                solver_class = solverClasses[d.linear_solver];
                 return solver_class + " " + "solver_group " + GetClass(d) ;
                 // SOLVER END
             })
@@ -542,20 +543,21 @@ function PtN2Diagram(parentDiv, modelData) {
                 if (d.depth < zoomedElement.depth) return 0;
                 return d.textOpacity0;
             })
-            .text(GetText);
+            .text(GetSolverText);
 
-            // TODO Do I need these?
         var nodeSolverUpdate = nodeSolverEnter.merge(selSolver).transition(sharedTransition)
             .attr("class", function (d) {
                 // SOLVER
-                // return "solver_group " + GetClass(d);
-                if (d.solver === "LN: SCIPY"){
-                    solver_class = "scipy_solver"
-                } else {
-                    solver_class = "no_solver"                    
-                }
+                // // return "solver_group " + GetClass(d);
+                // if (d.solver === "LN: SCIPY"){
+                //     solver_class = "scipy_solver"
+                // } else {
+                //     solver_class = "no_solver"                    
+                // }
+                // return solver_class + " " + "solver_group " + GetClass(d) ;
+                 solver_class = solverClasses[d.linear_solver];
                 return solver_class + " " + "solver_group " + GetClass(d) ;
-                // SOLVER END
+               // SOLVER END
             })
             .attr("transform", function (d) {
                 x = 1.0 - d.xSolver - d.widthSolver; // The magic for reversing the blocks on the right side
@@ -581,7 +583,7 @@ function PtN2Diagram(parentDiv, modelData) {
                 if (d.depth < zoomedElement.depth) return 0;
                 return d.textOpacity;
             })
-            .text(GetText);
+            .text(GetSolverText);
 
 
         // Transition exiting nodes to the parent's new position.
@@ -706,6 +708,27 @@ function PtN2Diagram(parentDiv, modelData) {
         return retVal;
     }
 
+    // SOLVER
+    function GetSolverText(d) {
+        // var retVal = d.name;
+        // if (outputNamingType === "Promoted" && (d.type === "unknown" || d.type === "param" || d.type === "unconnected_param") && zoomedElement.promotions && zoomedElement.promotions[d.absPathName] !== undefined) {
+        //     retVal = zoomedElement.promotions[d.absPathName];
+        // }
+        // if (d.splitByColon && d.children && d.children.length > 0) retVal += ":";
+        // if (d.solver === "")
+        //     var retVal = "None";
+        // else
+        //     var retVal = d.solver;  
+
+
+        // var retVal = d.linear_solver; 
+        // var retVal = d.linear_solver + " " + d.nonlinear_solver; 
+        var retVal = showLinearSolverNames ? d.linear_solver : d.nonlinear_solver;
+        return retVal;
+    }
+    // SOLVER END
+
+
     //Sets parents, depth, and nameWidthPx of all nodes.  Also finds and sets maxDepth.
     function InitTree(d, parent, depth) {
         d.numLeaves = 0; //for nested params
@@ -821,7 +844,9 @@ function PtN2Diagram(parentDiv, modelData) {
         // SOLVER
         function UpdateSolverTextWidths(d) {
             if ((d.type === "param" || d.type === "unconnected_param") || d.varIsHidden) return;
-            d.nameSolverWidthPx = GetTextWidth(GetText(d)) + 2 * RIGHT_TEXT_MARGIN_PX;
+            var name = GetSolverText(d);
+            d.nameSolverWidthPx = GetTextWidth(name) + 2 * RIGHT_TEXT_MARGIN_PX;
+            // d.nameSolverWidthPx = GetTextWidth(GetSolverText(d)) + 2 * RIGHT_TEXT_MARGIN_PX;
             if (d.children) {
                 for (var i = 0; i < d.children.length; ++i) {
                     UpdateSolverTextWidths(d.children[i]);
@@ -886,7 +911,7 @@ function PtN2Diagram(parentDiv, modelData) {
                 var hasVisibleDetail = (heightPx >= 2.0);
                 var widthPx = 1e-3;
                 if (hasVisibleDetail) widthPx = MIN_COLUMN_WIDTH_PX;
-                if (d.textOpacity > 0.5) widthPx = d.nameWidthPx;
+                if (d.textOpacity > 0.5) widthPx = d.nameSolverWidthPx;
 
                 greatestDepth = Math.max(greatestDepth, d.depth);
 
@@ -1940,6 +1965,12 @@ function PtN2Diagram(parentDiv, modelData) {
         Update();
     }
 
+    function ToggleSolverNamesCheckboxChange() {
+        showLinearSolverNames = !showLinearSolverNames;
+        // parentDiv.querySelector("#showParamsButtonId").className = showParams ? "myButton myButtonToggledOn" : "myButton";
+        Update();
+    }
+
     function ShowPathCheckboxChange() {
         showPath = !showPath;
         parentDiv.querySelector("#currentPathId").style.display = showPath ? "block" : "none";
@@ -1970,6 +2001,10 @@ function PtN2Diagram(parentDiv, modelData) {
         div.querySelector("#showCurrentPathButtonId").onclick = ShowPathCheckboxChange;
         div.querySelector("#showLegendButtonId").onclick = ToggleLegend;
         div.querySelector("#showParamsButtonId").onclick = ShowParamsCheckboxChange;
+
+        // SOLVER
+        div.querySelector("#toggleSolverNamesButtonId").onclick = ToggleSolverNamesCheckboxChange;
+        // SOLVER END
 
         for (var i = 8; i <= 14; ++i) {
             var f = function (idx) {
@@ -2011,5 +2046,16 @@ var mouseClickN2;
 var hasInputConn;
 var treeData, connectionList;
 modelData.tree.name = 'model'; //Change 'root' to 'model'
+function ChangeBlankSolverToNone(d) {
+    if (d.linear_solver === "") d.linear_solver = "None";
+    if (d.nonlinear_solver === "") d.nonlinear_solver = "None";
+    if (d.children) {
+        for (var i = 0; i < d.children.length; ++i) {
+            ChangeBlankSolverToNone(d.children[i]);
+        }
+    }
+}
+ChangeBlankSolverToNone(modelData.tree);
+
 var app = PtN2Diagram(document.getElementById("ptN2ContentDivId"), modelData);
 
