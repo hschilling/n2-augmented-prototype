@@ -12,15 +12,53 @@ var CONNECTION_COLOR = "black",
 HIGHLIGHT_HOVERED_COLOR = "blue";
 
 // SOLVER
-var SCIPY_SOLVER_COLOR = "#de9292",
-    NO_SOLVER_COLOR = "#7fe4e4";
+// var SCIPY_SOLVER_COLOR = "#de9292",
+//     NO_SOLVER_COLOR = "#7fe4e4";
 
-var solverColors = {};
-colorsForSolvers = ['#ffffcc','#c7e9b4','#7fcdbb','#41b6c4','#1d91c0','#225ea8','#0c2c84']; // used http://colorbrewer2.org to pick colors
-solverNames = ["None", "LN: LNBJ", "LN: SCIPY", "LN: RUNONCE", "LN: Direct", "LN: PETScKrylov", "LN: LNBGS", "LN: USER" ];
-for (var i = 0; i < solverNames.length; ++i) {
-    solverColors[solverNames[i]] = colorsForSolvers[i];
+var linearSolverColors = {};
+var linearSolverClasses = {} ;
+colorsForLinearSolvers = ['#ffffcc','#c7e9b4','#7fcdbb','#41b6c4','#1d91c0','#225ea8','#0c2c84']; // used http://colorbrewer2.org to pick colors
+classesForLinearSolvers = ["no_solver", "linear_block_jacobi_solver", "scipy_solver", "runonce_solver", "linalg_solve_solver", "petsc_krylov_solver", 
+                        "block_gauss_seidel_solver", "user_defined_solver"]
+linearSolverNames = ["None", "LN: LNBJ", "LN: SCIPY", "LN: RUNONCE", "LN: Direct", "LN: PETScKrylov", "LN: LNBGS", "LN: USER" ];
+for (var i = 0; i < linearSolverNames.length; ++i) {
+    linearSolverColors[linearSolverNames[i]] = colorsForLinearSolvers[i];
+    linearSolverClasses[linearSolverNames[i]] = classesForLinearSolvers[i];
 }
+
+var nonLinearSolverColors = {};
+var nonLinearSolverClasses = {} ;
+colorsForNonLinearSolvers = ['#ffffcc','#c7e9b4','#7fcdbb','#41b6c4','#2c7fb8','#253494']; // used http://colorbrewer2.org to pick colors
+classesForNonLinearSolvers = ["no_solver", "newton_solver", "nonlinear_block_jacobi_solver", "broyden", "nonlinear_block_gs", 
+                        "runonce_nonlinear_solver", "user_defined_solver"]
+nonLinearSolverNames = ["None", "NL: Newton", "NL: NLBJ", "BROYDEN", "NL: NLBGS", "NL: RUNONCE" ];
+for (var i = 0; i < nonLinearSolverNames.length; ++i) {
+    nonLinearSolverColors[nonLinearSolverNames[i]] = colorsForLinearSolvers[i];
+    nonLinearSolverClasses[nonLinearSolverNames[i]] = classesForLinearSolvers[i];
+}
+// solverClasses["None"] = "no_solver";
+// solverClasses["LN: LNBJ"] = "linear_block_jacobi_solver";
+// solverClasses["LN: SCIPY"] = "scipy_solver"; // Krylov iterative solvers
+// solverClasses["LN: RUNONCE"] = "runonce_solver";
+// solverClasses["LN: Direct"] = "linalg_solve_solver"; // LinearSolver that uses linalg.solve or LU factor/solve
+// solverClasses["LN: PETScKrylov"] = "petsc_krylov_solver"; // PetSC KSP to solve for a system's derivatives
+// solverClasses["LN: LNBGS"] = "block_gauss_seidel_solver"; // Linear block Gauss-Seidel solver
+// solverClasses["LN: USER"] = "user_defined_solver"; // user defined
+
+// Later add these for nonlinear and linesearch ?
+// Nonlinear
+// NL: Newton
+// NL: NLBJ
+// BROYDEN
+// NL: NLBGS
+// NL: RUNONCE
+
+// Linesearch
+// LS: AG
+// LS: BCHK
+
+
+
 
 // SOLVER END
 
@@ -53,27 +91,6 @@ var showLinearSolverNames = true;
 // SOLVER END
 
 // SOLVER
-var solverClasses = {} ;
-solverClasses["None"] = "no_solver";
-solverClasses["LN: LNBJ"] = "linear_block_jacobi_solver";
-solverClasses["LN: SCIPY"] = "scipy_solver"; // Krylov iterative solvers
-solverClasses["LN: RUNONCE"] = "runonce_solver";
-solverClasses["LN: Direct"] = "linalg_solve_solver"; // LinearSolver that uses linalg.solve or LU factor/solve
-solverClasses["LN: PETScKrylov"] = "petsc_krylov_solver"; // PetSC KSP to solve for a system's derivatives
-solverClasses["LN: LNBGS"] = "block_gauss_seidel_solver"; // Linear block Gauss-Seidel solver
-solverClasses["LN: USER"] = "user_defined_solver"; // user defined
-
-// Later add these for nonlinear and linesearch ?
-// Nonlinear
-// NL: Newton
-// NL: NLBJ
-// BROYDEN
-// NL: NLBGS
-// NL: RUNONCE
-
-// Linesearch
-// LS: AG
-// LS: BCHK
 
 
 // SOLVER END

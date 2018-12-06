@@ -76,12 +76,12 @@ function SetupLegend(d3, d3ContentDiv) {
 
     //COLORS
     {
-        var text = ["Group", "Component", "Unknown Explicit", "Unknown Implicit", "Collapsed", "Connection"];
+        var text = ["Group", "Component", "Output Explicit", "Output Implicit", "Collapsed", "Connection"];
         var colors = [GROUP_COLOR, COMPONENT_COLOR, UNKNOWN_EXPLICIT_COLOR, UNKNOWN_IMPLICIT_COLOR, COLLAPSED_COLOR, CONNECTION_COLOR];
         if (showParams) {
-            text.splice(2, 0, "Param");
+            text.splice(2, 0, "Input");
             colors.splice(2, 0, PARAM_COLOR);
-            text.splice(3, 0, "Unconnected Param")
+            text.splice(3, 0, "Unconnected Input")
             colors.splice(3, 0, UNCONNECTED_PARAM_COLOR)
         }
         for (var i = 0; i < text.length; ++i) {
@@ -115,11 +115,20 @@ function SetupLegend(d3, d3ContentDiv) {
         //     DrawLegendColor(el, u, v, colors[i], false);
         //     CreateText(el, text[i]);
         // }
-        for (var i = 0; i < solverNames.length; ++i) {
-            var el = svg_legend.append("g").attr("transform", "translate(" + (columnWidth * 2 + xOffset + u) + "," + (80 + 40 * i + v) + ")");
-            var name = solverNames[i];
-            DrawLegendColor(el, u, v, solverColors[name], false);
-            CreateText(el, name);
+        if (showLinearSolverNames){
+            for (var i = 0; i < linearSolverNames.length; ++i) {
+                var el = svg_legend.append("g").attr("transform", "translate(" + (columnWidth * 2 + xOffset + u) + "," + (80 + 40 * i + v) + ")");
+                var name = linearSolverNames[i];
+                DrawLegendColor(el, u, v, linearSolverColors[name], false);
+                CreateText(el, name);
+            }
+        } else {
+            for (var i = 0; i < nonLinearSolverNames.length; ++i) {
+                var el = svg_legend.append("g").attr("transform", "translate(" + (columnWidth * 2 + xOffset + u) + "," + (80 + 40 * i + v) + ")");
+                var name = nonLinearSolverNames[i];
+                DrawLegendColor(el, u, v, nonLinearSolverColors[name], false);
+                CreateText(el, name);
+            }
         }
     }
     // SOLVER END

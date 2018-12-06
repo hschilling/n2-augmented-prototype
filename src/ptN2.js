@@ -488,7 +488,7 @@ function PtN2Diagram(parentDiv, modelData) {
                 // } else {
                 //     solver_class = "no_solver"                    
                 // }
-                solver_class = solverClasses[d.linear_solver];
+                solver_class = showLinearSolverNames ? linearSolverClasses[d.linear_solver] : nonLinearSolverClasses[d.nonlinear_solver];
                 return solver_class + " " + "solver_group " + GetClass(d) ;
                 // SOLVER END
             })
@@ -555,7 +555,7 @@ function PtN2Diagram(parentDiv, modelData) {
                 //     solver_class = "no_solver"                    
                 // }
                 // return solver_class + " " + "solver_group " + GetClass(d) ;
-                 solver_class = solverClasses[d.linear_solver];
+                solver_class = showLinearSolverNames ? linearSolverClasses[d.linear_solver] : nonLinearSolverClasses[d.nonlinear_solver];
                 return solver_class + " " + "solver_group " + GetClass(d) ;
                // SOLVER END
             })
@@ -1968,6 +1968,7 @@ function PtN2Diagram(parentDiv, modelData) {
     function ToggleSolverNamesCheckboxChange() {
         showLinearSolverNames = !showLinearSolverNames;
         // parentDiv.querySelector("#showParamsButtonId").className = showParams ? "myButton myButtonToggledOn" : "myButton";
+        SetupLegend(d3, d3ContentDiv);
         Update();
     }
 
