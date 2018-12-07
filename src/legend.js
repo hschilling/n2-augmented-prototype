@@ -62,7 +62,7 @@ function SetupLegend(d3, d3ContentDiv) {
     //COLUMN TITLES
     {
         // var text = ["Colors", "N^2 Symbols"];
-        var text = ["System Colors", "N^2 Symbols", "Solver Colors"];
+        var text = ["System Colors", "N^2 Symbols", showLinearSolverNames? " Linear Solvers" : "Nonlinear Solvers"];
         for (var i = 0; i < text.length; ++i) {
             var el = svg_legend.append("g").attr("transform", "translate(" + (columnWidth * i + xOffset) + "," + (60) + ")");
             el.append("svg:text")
