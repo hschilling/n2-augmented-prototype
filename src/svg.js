@@ -25,7 +25,8 @@ var CONNECTION_COLOR = "black",
    PARAM_GROUP_COLOR = "Orchid",
    GROUP_COLOR = "#3476a2",
    COMPONENT_COLOR = "DeepSkyBlue",
-   COLLAPSED_COLOR = "#555";
+   COLLAPSED_COLOR = "#555",
+   UNCONNECTED_PARAM_COLOR = "#F42E0C";
 
 function SaveSvg(parentDiv) {
     //get svg element.
@@ -109,24 +110,12 @@ function UpdateSvgCss(svgStyleElement, FONT_SIZE_PX){
         "    font-family: helvetica, sans-serif; " +
         "    font-size: " + FONT_SIZE_PX +"px; " +
         "} " +
-        // SOLVER
         "#svgId"+" g.solver_group > text { " +
         "    text-anchor: end; " +
         "    pointer-events: none; " +
         "    font-family: helvetica, sans-serif; " +
         "    font-size: " + FONT_SIZE_PX +"px; " +
         "} " +
-        // "g.scipy_solver > rect { " +
-        // "    cursor: pointer; " +
-        // "    fill-opacity: .8; " +
-        // "    fill: " + SCIPY_SOLVER_COLOR + "; " +
-        // "} " +
-        // "g.no_solver > rect { " +
-        // "    cursor: pointer; " +
-        // "    fill-opacity: .8; " +
-        // "    fill: " + NO_SOLVER_COLOR + "; " +
-        // "} " +
-        // SOLVER END
         "/* n2 diagram*/  " +
         "g.component_box > rect { " +
         "    stroke: " + N2_COMPONENT_BOX_COLOR + "; " +
@@ -148,7 +137,6 @@ function UpdateSvgCss(svgStyleElement, FONT_SIZE_PX){
         "    stroke: " + N2_GRIDLINE_COLOR + "; " +
         "}";
 
-        // SOLVER 
         for (var i = 0; i < linearSolverNames.length; ++i) {
             var name = linearSolverNames[i];
             myCssText +=  "g." + linearSolverClasses[name] + " > rect { " +
@@ -165,7 +153,6 @@ function UpdateSvgCss(svgStyleElement, FONT_SIZE_PX){
             "    fill: " + nonLinearSolverColors[name] + "; " +
             "} " ;
         }
-        // SOLVER END
 
 
         svgStyleElement.innerHTML = myCssText;

@@ -1,10 +1,9 @@
 var showLegend = false; //default off
 
 function SetupLegend(d3, d3ContentDiv) {
-    // var numColumns = 2;
     var numColumns = 3;
     var elementSize = 30, xOffset = 10, columnWidth = 250;
-    var legendWidth = columnWidth * numColumns + 0, legendHeight = 360;
+    var legendWidth = columnWidth * numColumns + 0, legendHeight = 500;
     var u = elementSize * .5;
     var v = u;
 
@@ -61,7 +60,6 @@ function SetupLegend(d3, d3ContentDiv) {
 
     //COLUMN TITLES
     {
-        // var text = ["Colors", "N^2 Symbols"];
         var text = ["System Colors", "N^2 Symbols", showLinearSolverNames? " Linear Solvers" : "Nonlinear Solvers"];
         for (var i = 0; i < text.length; ++i) {
             var el = svg_legend.append("g").attr("transform", "translate(" + (columnWidth * i + xOffset) + "," + (60) + ")");
@@ -104,17 +102,8 @@ function SetupLegend(d3, d3ContentDiv) {
         }
     }
 
-    // SOLVER
     //SOLVER COLORS
     {
-        // var text = ["None", "Scipy"];
-        // var colors = [NO_SOLVER_COLOR, SCIPY_SOLVER_COLOR];
-        // var shapeFunctions = [DrawScalar, DrawVector, DrawGroup];
-        // for (var i = 0; i < text.length; ++i) {
-        //     var el = svg_legend.append("g").attr("transform", "translate(" + (columnWidth * 2 + xOffset + u) + "," + (80 + 40 * i + v) + ")");
-        //     DrawLegendColor(el, u, v, colors[i], false);
-        //     CreateText(el, text[i]);
-        // }
         if (showLinearSolverNames){
             for (var i = 0; i < linearSolverNames.length; ++i) {
                 var el = svg_legend.append("g").attr("transform", "translate(" + (columnWidth * 2 + xOffset + u) + "," + (80 + 40 * i + v) + ")");
@@ -131,7 +120,6 @@ function SetupLegend(d3, d3ContentDiv) {
             }
         }
     }
-    // SOLVER END
 
 }
 

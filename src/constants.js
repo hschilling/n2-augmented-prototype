@@ -1,66 +1,74 @@
-//color constants
+// From Isaias
 var CONNECTION_COLOR = "black",
-    UNKNOWN_IMPLICIT_COLOR = "orange",
-    UNKNOWN_EXPLICIT_COLOR = "#AAA",
-    RED_ARROW_COLOR = "salmon",
-    GREEN_ARROW_COLOR = "seagreen",
-    PARAM_COLOR = "Plum",
-    UNCONNECTED_PARAM_COLOR = "#F42E0C",
-    GROUP_COLOR = "steelblue",
-    COMPONENT_COLOR = "DeepSkyBlue",
-    COLLAPSED_COLOR = "#555";
-HIGHLIGHT_HOVERED_COLOR = "blue";
+   UNKNOWN_IMPLICIT_COLOR = "#c7d06d",
+   UNKNOWN_EXPLICIT_COLOR = "#9ec4c7",
+   N2_COMPONENT_BOX_COLOR = "#555",
+   N2_BACKGROUND_COLOR = "#eee",
+   N2_GRIDLINE_COLOR = "white",
+   PT_STROKE_COLOR = "#eee",
+   UNKNOWN_GROUP_COLOR = "#888",
+   PARAM_COLOR = "#32afad",
+   PARAM_GROUP_COLOR = "Orchid",
+   GROUP_COLOR = "#3476a2",
+   COMPONENT_COLOR = "DeepSkyBlue",
+   COLLAPSED_COLOR = "#555",
+   UNCONNECTED_PARAM_COLOR = "#F42E0C";
 
-// SOLVER
-// var SCIPY_SOLVER_COLOR = "#de9292",
-//     NO_SOLVER_COLOR = "#7fe4e4";
+// This is how we want to map solvers to colors and CSS classes
+//    Linear             Nonlinear
+//    ---------          ---------
+// 0. None               None
+// 1. LN: LNBJ           NL: NLBJ
+// 2. LN: SCIPY
+// 3. LN: RUNONCE        NL: RUNONCE
+// 4. LN: Direct
+// 5. LN: PETScKrylov
+// 6. LN: LNBGS          NL: NLBGS
+// 7. LN: USER
+// 8.                    NL: Newton
+// 9.                    BROYDEN
+// 10. solve_linear      solve_nonlinear
+// 11. other             other
 
-var linearSolverColors = {};
-var linearSolverClasses = {} ;
-colorsForLinearSolvers = ['#ffffcc','#c7e9b4','#7fcdbb','#41b6c4','#1d91c0','#225ea8','#0c2c84']; // used http://colorbrewer2.org to pick colors
-classesForLinearSolvers = ["no_solver", "linear_block_jacobi_solver", "scipy_solver", "runonce_solver", "linalg_solve_solver", "petsc_krylov_solver", 
-                        "block_gauss_seidel_solver", "user_defined_solver"]
-linearSolverNames = ["None", "LN: LNBJ", "LN: SCIPY", "LN: RUNONCE", "LN: Direct", "LN: PETScKrylov", "LN: LNBGS", "LN: USER" ];
-for (var i = 0; i < linearSolverNames.length; ++i) {
-    linearSolverColors[linearSolverNames[i]] = colorsForLinearSolvers[i];
-    linearSolverClasses[linearSolverNames[i]] = classesForLinearSolvers[i];
-}
-
-var nonLinearSolverColors = {};
-var nonLinearSolverClasses = {} ;
-colorsForNonLinearSolvers = ['#ffffcc','#c7e9b4','#7fcdbb','#41b6c4','#2c7fb8','#253494']; // used http://colorbrewer2.org to pick colors
-classesForNonLinearSolvers = ["no_solver", "newton_solver", "nonlinear_block_jacobi_solver", "broyden", "nonlinear_block_gs", 
-                        "runonce_nonlinear_solver", "user_defined_solver"]
-nonLinearSolverNames = ["None", "NL: Newton", "NL: NLBJ", "BROYDEN", "NL: NLBGS", "NL: RUNONCE" ];
-for (var i = 0; i < nonLinearSolverNames.length; ++i) {
-    nonLinearSolverColors[nonLinearSolverNames[i]] = colorsForLinearSolvers[i];
-    nonLinearSolverClasses[nonLinearSolverNames[i]] = classesForLinearSolvers[i];
-}
-// solverClasses["None"] = "no_solver";
-// solverClasses["LN: LNBJ"] = "linear_block_jacobi_solver";
-// solverClasses["LN: SCIPY"] = "scipy_solver"; // Krylov iterative solvers
-// solverClasses["LN: RUNONCE"] = "runonce_solver";
-// solverClasses["LN: Direct"] = "linalg_solve_solver"; // LinearSolver that uses linalg.solve or LU factor/solve
-// solverClasses["LN: PETScKrylov"] = "petsc_krylov_solver"; // PetSC KSP to solve for a system's derivatives
-// solverClasses["LN: LNBGS"] = "block_gauss_seidel_solver"; // Linear block Gauss-Seidel solver
-// solverClasses["LN: USER"] = "user_defined_solver"; // user defined
-
-// Later add these for nonlinear and linesearch ?
-// Nonlinear
-// NL: Newton
-// NL: NLBJ
-// BROYDEN
-// NL: NLBGS
-// NL: RUNONCE
-
-// Linesearch
+// Later add these for linesearch ?
 // LS: AG
 // LS: BCHK
 
+// From https://colorbrewer.org
+var colors = ['#8dd3c7','#ffffb3','#bebada','#fb8072','#80b1d3','#fdb462','#b3de69','#fccde5','#d9d9d9','#bc80bd','#ccebc5','#ffed6f'];
 
+var linearSolverColors = {};
+var linearSolverClasses = {} ;
+var nonLinearSolverColors = {};
+var nonLinearSolverClasses = {} ;
+var linearSolverNames = [];
+var nonLinearSolverNames = [] ;
 
+function setSolverColorAndCSSClass(ln_solver, nl_solver, idx){
+    if (ln_solver){
+        linearSolverColors[ln_solver] = colors[idx];
+        linearSolverClasses[ln_solver] = "solver_" + idx;
+        linearSolverNames.push(ln_solver);       
+    }
+    if (nl_solver){
+        nonLinearSolverColors[nl_solver] = colors[idx];
+        nonLinearSolverClasses[nl_solver] = "solver_" + idx
+        nonLinearSolverNames.push(nl_solver);       
+    }
+}
 
-// SOLVER END
+setSolverColorAndCSSClass( "None", "None", 0);
+setSolverColorAndCSSClass( "LN: LNBJ", "NL: NLBJ", 1);
+setSolverColorAndCSSClass( "LN: SCIPY", "", 2);
+setSolverColorAndCSSClass( "LN: RUNONCE", "NL: RUNONCE", 3);
+setSolverColorAndCSSClass( "LN: Direct", "", 4);
+setSolverColorAndCSSClass( "LN: PETScKrylov", "", 5);
+setSolverColorAndCSSClass( "LN: LNBGS", "NL: NLBGS", 6);
+setSolverColorAndCSSClass( "LN: USER", "", 7);
+setSolverColorAndCSSClass( "", "NL: Newton", 8);
+setSolverColorAndCSSClass( "", "BROYDEN", 9);
+setSolverColorAndCSSClass( "solve_linear", "solve_nonlinear", 10);
+setSolverColorAndCSSClass( "other", "other", 11);
 
 var widthPTreePx = 1,
     kx = 0, ky = 0, kx0 = 0, ky0 = 0,
@@ -77,20 +85,11 @@ var widthPTreePx = 1,
     yScalerPTree0 = null,
     LEVEL_OF_DETAIL_THRESHOLD = HEIGHT_PX / 3; //3 pixels
 
-// SOLVER
 var widthPSolverTreePx = 1,
     kSolverx = 0, kSolvery = 0, kSolverx0 = 0, kSolvery0 = 0,
     xScalerPSolverTree = d3.scaleLinear().range([0, widthPSolverTreePx]),
     yScalerPSolverTree = d3.scaleLinear().range([0, HEIGHT_PX]),
     xScalerPSolverTree0 = null,
     yScalerPSolverTree0 = null;
-// SOLVER END
 
-// SOLVER
 var showLinearSolverNames = true;
-// SOLVER END
-
-// SOLVER
-
-
-// SOLVER END
